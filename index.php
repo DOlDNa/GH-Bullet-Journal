@@ -255,9 +255,9 @@
 								<tbody>
 									<tr>
 										<th id=gauge><span style="top:-5px">100%</span><span style="top:41%">50%</span><span style="bottom:-5px">0%</span></th>
-										<td title="<?=$yearly_complete?>%"><span class=graph><span class=bar style="height:<?=$yearly_complete?>%"></span></span></td>
-										<td title="<?=$monthly_complete?>%"><span class=graph><span class=bar style="height:<?=$monthly_complete?>%"></span></span></td>
-										<td title="<?=$daily_complete?>%"><span class=graph><span class=bar style="height:<?=$daily_complete?>%"></span></span></td>
+										<td><span class="museo-slab graph" data-tooltip="<?=$yearly_complete?>%"><span class=bar style="height:<?=$yearly_complete?>%"></span></span></td>
+										<td><span class="museo-slab graph" data-tooltip="<?=$monthly_complete?>%"><span class=bar style="height:<?=$monthly_complete?>%"></span></span></td>
+										<td><span class="museo-slab graph" data-tooltip="<?=$daily_complete?>%"><span class=bar style="height:<?=$daily_complete?>%"></span></span></td>
 									</tr>
 									<tr id=th>
 										<th></th>
