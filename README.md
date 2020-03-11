@@ -2,8 +2,7 @@
 
 # ■GH-Bullet-Journal とは？
 * PC上で管理できる「やることリスト」です。
-* XAMPP for Linux で使用できます。
-* Windows や Mac でのご利用は自己責任でどうぞ。
+* XAMPP for Linux 及び Docker([lapi](https://github.com/DOlDNa/lapi)) で使用できます。
 
 # ■インストール方法
 * htdocsディレクトリにDLして下さい。
