@@ -14,16 +14,16 @@ $m = date('m');
 $d = date('d');
 $today = "$y-$m-$d";
 $maxy = $y+1000;
-$get_date = filter_has_var(INPUT_GET, 'date') ? basename(filter_input(INPUT_GET, 'date', FILTER_SANITIZE_NUMBER_INT)) : $today;
+$get_date = !filter_has_var(INPUT_GET, 'date') ? $today : filter_input(INPUT_GET, 'date', FILTER_CALLBACK, ['options' => 'basename', 'flags' => FILTER_SANITIZE_NUMBER_INT]);
 
 if (substr_count($get_date, '-') === 0)
 	$get_date .= '-'. (substr($get_date, 0, 4) === $y ? $m : '01');
 
 $thisday = substr_count($get_date, '-') === 1? $get_date. '-01' : $get_date;
-$target = filter_has_var(INPUT_GET, 'target') ? basename(filter_input(INPUT_GET, 'target', FILTER_SANITIZE_STRIPPED)) : 'daily';
-$lineno = basename(filter_input(INPUT_GET, 'lineno', FILTER_SANITIZE_NUMBER_INT));
-$mode = basename(filter_input(INPUT_GET, 'mode', FILTER_SANITIZE_STRIPPED));
-$timestamp = filter_has_var(INPUT_GET, 'date') ? strtotime($get_date) : time();
+$target = !filter_has_var(INPUT_GET, 'target') ? 'daily' : filter_input(INPUT_GET, 'target', FILTER_CALLBACK, ['options' => 'strip_tags_basename']);
+$lineno = !filter_has_var(INPUT_GET, 'lineno') ? '' : filter_input(INPUT_GET, 'lineno', FILTER_CALLBACK, ['options' => 'basename', 'flags' => FILTER_SANITIZE_NUMBER_INT]);
+$mode = !filter_has_var(INPUT_GET, 'mode') ? '' : filter_input(INPUT_GET, 'mode', FILTER_CALLBACK, ['options' => 'strip_tags_basename']);
+$timestamp = !filter_has_var(INPUT_GET, 'date') ? time() : strtotime($get_date);
 
 $year = date('Y', $timestamp);
 $month = date('m', $timestamp);
@@ -120,11 +120,11 @@ if (!is_file($htaccess = $dir. '.htaccess'))
 	header('Location: ./');
 }
 
-$date = filter_has_var(INPUT_POST, 'date') ? filter_input(INPUT_POST, 'date', FILTER_SANITIZE_NUMBER_INT) : date('Y-m-d', $timestamp);
+$date = !filter_has_var(INPUT_POST, 'date') ? date('Y-m-d', $timestamp) : filter_input(INPUT_POST, 'date', FILTER_SANITIZE_NUMBER_INT);
 
 if (filter_has_var(INPUT_POST, 'schedule'))
 {
-	$sanitized = filter_input_array(INPUT_POST, ['color'=>FILTER_SANITIZE_STRIPPED, 'schedule'=>FILTER_SANITIZE_SPECIAL_CHARS, 'target'=>FILTER_SANITIZE_STRIPPED]);
+	$sanitized = filter_input_array(INPUT_POST, ['color' => ['filter' => FILTER_CALLBACK, 'options' => 'strip_tags_basename'], 'schedule' => FILTER_SANITIZE_SPECIAL_CHARS, 'target' => ['filter' => FILTER_CALLBACK, 'options' => 'strip_tags_basename']]);
 
 	$color = trim($sanitized['color']);
 
@@ -210,4 +210,9 @@ if ($mode === 'delete')
 	}
 	else
 		$error_message = 'スケジュールが見つかりませんでした';
+}
+
+function strip_tags_basename($str)
+{
+	return strip_tags(basename($str));
 }
